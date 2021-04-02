@@ -1,9 +1,14 @@
+server:
+  port: ${PORT:8080}
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    password: "${MYSQLPASS:}"
-    url: "jdbc:mysql://${MYSQLHOST:localhost}:3306/softuni_musicdb_w?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true"
-    username: root
+    driver-class-name: org.postgresql.Driver
+    password: ${JDBC_DATABASE_PASSWORD:}
+    url: ${JDBC_DATABASE_URL:}
+    username: ${JDBC_DATABASE_USERNAME:}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
   servlet:
     multipart:
       max-file-size: 1MB
@@ -12,17 +17,18 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-
   jpa:
     #    For MySQL 8
     #database-platform: org.hibernate.dialect.MySQL8Dialect
     #For MySQL 5
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    #database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: ${SPRING_JPA_DATABASE-PLATFORM:}
     hibernate:
       ddl-auto: update
     open-in-view: false
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 carousel:
   images: aerosmith.jpeg, iron.jpeg, madonna.jpg, metallica.jpg, queen.jpg, rolling.jpeg
